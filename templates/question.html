@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pergunta - Jogo Mestre de TI</title>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Press Start 2P', cursive; /* Fonte pixelada */
+            background-color: #121212;
+            background-image: repeating-linear-gradient(
+                45deg,
+                #1a1a1a 25%,
+                #121212 25%,
+                #121212 50%,
+                #1a1a1a 50%,
+                #1a1a1a 75%,
+                #121212 75%,
+                #121212
+            );
+            background-size: 40px 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        .container {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 40px; /* Aumenta o padding */
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+            text-align: center;
+            color: #fff; /* Altera a cor do texto para branco */
+            position: relative;
+        }
+        .timer {
+            font-size: 24px;
+            color: red;
+            margin-bottom: 20px;
+        }
+        .question {
+            color: #ffcc00; /* Cor leve para destacar a pergunta */
+            font-size: 20px; /* Tamanho da fonte da pergunta */
+            margin-bottom: 20px; /* Espaço entre a pergunta e as opções */
+        }
+        
+        input[type="radio"] {
+            margin: 15px 0;
+            cursor: pointer; /* Muda o cursor ao passar sobre os botões */
+            width: 25px; /* Aumenta o tamanho do círculo */
+            height: 25px; /* Aumenta o tamanho do círculo */
+        }
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+            font-size: 18px;
+            transition: background-color 0.3s, transform 0.2s; /* Adiciona efeito ao botão */
+        }
+        button:hover {
+            transform: scale(1.05); /* Efeito de aumento ao passar o mouse */
+        }
+        .submit-button {
+            background-color: #a800ff; /* Cor de fundo do botão "Enviar Resposta" */
+            color: #fff; /* Cor do texto do botão "Enviar Resposta" */
+        }
+        .skip-button {
+            background-color: #28a745; /* Cor do botão "Pular Pergunta" */
+            color: #fff; /* Cor do texto do botão "Pular Pergunta" */
+        }
+        .eliminate-button {
+            background-color: #dc3545; /* Cor do botão "Eliminar Opções" */
+            color: #fff; /* Cor do texto do botão "Eliminar Opções" */
+        }
+        .giveup-button {
+            background-color: #ffc107; /* Cor do botão "Desistir" */
+            color: #000; /* Cor do texto do botão "Desistir" */
+        }
+    </style>
+    <script>
+        let timeLeft = 30;
+
+        function startTimer() {
+            const timerElement = document.getElementById('timer');
+            const interval = setInterval(() => {
+                if (timeLeft <= 0) {
+                    clearInterval(interval);
+                    const answerField = document.getElementById('answer'); // Verifique o ID do campo de resposta
+                    if (answerField.value) {
+                        document.getElementById('answer-form').submit(); // Envia a resposta automaticamente
+                    } else {
+                        // Se não houver resposta, você pode definir um valor padrão ou não fazer nada
+                        fetch('/set_time_expired', { method: 'POST' }); // Define a variável na sessão
+                    }
+                } else {
+                    timerElement.textContent = timeLeft + " segundos restantes";
+                }
+                timeLeft -= 1;
+            }, 1000);
+        }
+
+
+
+        window.onload = startTimer; // Inicia o timer ao carregar a página
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1>Fase {{ phase }}</h1>
+        <p>Sua Pontuação: {{ score }}</p>
+        <p class="timer" id="timer">30 segundos restantes</p>
+        <p class="question">{{ question }}</p> <!-- Pergunta com nova classe -->
+        <form id="answer-form" method="POST">
+            {% for option in options %}
+                <div>
+                    <input type="radio" name="answer" value="{{ option }}" required> {{ option }}
+                </div>
+            {% endfor %}
+            <button type="submit" class="submit-button">Enviar Resposta</button>
+        </form>
+
+        <form action="{{ url_for('skip_question') }}" method="POST" style="display: inline;">
+            <button type="submit" class="skip-button">Pular Pergunta</button>
+        </form>
+
+        <form action="{{ url_for('eliminate_options') }}" method="POST" style="display: inline;">
+            <button type="submit" class="eliminate-button">Eliminar Opções</button>
+        </form>
+
+        <form action="{{ url_for('give_up') }}" method="POST" style="display: inline;">
+            <button type="submit" class="giveup-button">Desistir</button>
+        </form>
+    </div>
+</body>
+</html>

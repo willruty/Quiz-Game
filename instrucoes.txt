@@ -1,0 +1,10 @@
+1- Atualize seu PIP
+python.exe -m pip install --upgrade pip
+
+2- Instale o PIPX, caso não possua
+pip install pipx
+
+3- Instale o Poetry para gestão do código e suas dependências, USANDO O PIPX
+pipx install poetry
+
+4- 

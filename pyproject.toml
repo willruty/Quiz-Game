@@ -1,0 +1,15 @@
+[tool.poetry]
+name = "desafio quiz - thiago"
+version = "0.1.0"
+description = "Trabalho da matéria de 'Algoritmos'"
+authors = ["Roney"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+flask = "^3.0.3"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
