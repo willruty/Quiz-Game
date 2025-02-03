@@ -17,7 +17,5 @@ O desenvolvimento do quiz exigiu o uso de diversas tecnologias e metodologias, i
 
 ## Resultados
 
-<video width="100%" autoplay loop muted>
-  <source src="Jogo Mestre de TI - Google Chrome 2025-02-03 20-07-27.mp4" type="video/mp4">
-</video>
+![Demonstração](JogoMestredeTI-GoogleChrome2025-02-0320-07-27-ezgif.com-video-to-gif-converter.gif)
 
